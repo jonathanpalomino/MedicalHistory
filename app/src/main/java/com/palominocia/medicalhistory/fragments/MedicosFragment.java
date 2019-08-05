@@ -165,8 +165,11 @@ public class MedicosFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void addAllMedicos(ArrayList<MedicoBean> listamedicos) {
         Log.i("addAllMessages","Inicio");
         //listaItems = new ArrayList<>();
-        listaItems.clear();
-        listaItems.addAll(listamedicos);
+        if(listamedicos instanceof ArrayList){
+            listaItems.clear();
+            listaItems.addAll(listamedicos);
+        }
+        
         mAdaptador.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
         Log.i("addAllMessages","Fin");
