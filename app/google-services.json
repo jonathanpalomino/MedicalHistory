@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "1003234117776",
+    "firebase_url": "https://medicalhistory-abad3.firebaseio.com",
+    "project_id": "medicalhistory-abad3",
+    "storage_bucket": "medicalhistory-abad3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003234117776:android:3f79e3579b816fd6",
+        "android_client_info": {
+          "package_name": "com.palominocia.medicalhistory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003234117776-bc9ulnnnf6sc0ebpf9ldvkcqob52cpba.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.palominocia.medicalhistory",
+            "certificate_hash": "ed3b5e88b1a95172e08835ad02e53db90a925ec9"
+          }
+        },
+        {
+          "client_id": "1003234117776-1qt761f3r6jf3u98hji5qs9nmokqe5hs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.palominocia.medicalhistory",
+            "certificate_hash": "4a02539b2cf20bb63042452872c2260d6c3e56a3"
+          }
+        },
+        {
+          "client_id": "1003234117776-5p8ul90kcv38lpdfsne142nofslt1fkm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv9BNwtubCr3vluOBdSQeHEsub00FTprg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003234117776-5p8ul90kcv38lpdfsne142nofslt1fkm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

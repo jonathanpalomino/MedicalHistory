@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_medicos"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/menu_medicos" />
+        <item
+            android:id="@+id/nav_citas_medicas"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_citas_medicas" />
+        <item
+            android:id="@+id/nav_recetas"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_recetas" />
+        <item
+            android:id="@+id/nav_diagnosticos"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/menu_diagnosticos" />
+    </group>
+
+    <item android:title="Medicacion">
+        <menu>
+            <item
+                android:id="@+id/nav_medicinas"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/menu_medicinas" />
+            <item
+                android:id="@+id/nav_medicinas_alergia"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/menu_medicinas_alergia" />
+        </menu>
+    </item>
+
+</menu>

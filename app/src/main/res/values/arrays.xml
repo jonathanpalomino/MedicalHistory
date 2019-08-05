@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="clientes">
+        <item>text_string</item>
+    </string-array>
+
+    <string-array name="productos">
+        <item>text_string</item>
+    </string-array>
+
+    <string-array name="prioridades">
+        <item>text_string</item>
+    </string-array>
+</resources>
