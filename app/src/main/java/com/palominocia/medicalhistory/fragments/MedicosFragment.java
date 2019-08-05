@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.palominocia.medicalhistory.FullScreenDialog;
 import com.palominocia.medicalhistory.MedicosAdapter;
 import com.palominocia.medicalhistory.R;
 import com.palominocia.medicalhistory.beans.MedicoBean;
@@ -195,11 +193,10 @@ public class MedicosFragment extends Fragment implements SwipeRefreshLayout.OnRe
         FullScreenDialog newFragment = new FullScreenDialog();
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        //transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        transaction.add(android.R.id.content, newFragment, "FullScreenFragment")
-                //.addToBackStack(null)
-                .commit();
-
-        //newFragment .show(getFragmentManager(), "example");
+        //transaction.replace(R.id.flContent, newFragment);
+        transaction.add(R.id.flContent, newFragment, "FullScreenFragment");
+        transaction.addToBackStack(null);
+        // Commit the transaction
+        transaction.commit();
     }
 }
