@@ -169,7 +169,7 @@ public class MedicosFragment extends Fragment implements SwipeRefreshLayout.OnRe
             listaItems.clear();
             listaItems.addAll(listamedicos);
         }
-        
+
         mAdaptador.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
         Log.i("addAllMessages","Fin");

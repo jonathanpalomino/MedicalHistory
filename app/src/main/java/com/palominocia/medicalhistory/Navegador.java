@@ -179,8 +179,11 @@ public class Navegador extends AppCompatActivity
         protected void onPostExecute(Boolean sucess) {
             if(sucess){
                 Log.i("ObtenerEmailTask","Inicio onPostExecute");
-                MedicosFragment articleFrag = (MedicosFragment)getSupportFragmentManager().findFragmentById(R.id.flContent);
-                articleFrag.addAllMedicos(listamedicos);
+                if(getSupportFragmentManager().findFragmentById(R.id.flContent) instanceof MedicosFragment){
+                    MedicosFragment articleFrag = (MedicosFragment)getSupportFragmentManager().findFragmentById(R.id.flContent);
+                    articleFrag.addAllMedicos(listamedicos);
+                }
+
                 Log.i("ObtenerEmailTask","Fin onPostExecute");
             }
         }
