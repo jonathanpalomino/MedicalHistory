@@ -22,6 +22,8 @@ public class CitasDao extends AbstractDao<Citas, Void> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
+        public final static Property CodigoCita = new Property(0, Long.class, "codigoCita", false, "CODIGO_CITA");
+        public final static Property FechaCita = new Property(1, java.util.Date.class, "fechaCita", false, "FECHA_CITA");
     }
 
 
@@ -37,6 +39,8 @@ public class CitasDao extends AbstractDao<Citas, Void> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"CITAS\" (" + //
+                "\"CODIGO_CITA\" INTEGER," + // 0: codigoCita
+                "\"FECHA_CITA\" INTEGER);"); // 1: fechaCita
     }
 
     /** Drops the underlying database table. */
@@ -48,11 +52,31 @@ public class CitasDao extends AbstractDao<Citas, Void> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, Citas entity) {
         stmt.clearBindings();
+ 
+        Long codigoCita = entity.getCodigoCita();
+        if (codigoCita != null) {
+            stmt.bindLong(1, codigoCita);
+        }
+ 
+        java.util.Date fechaCita = entity.getFechaCita();
+        if (fechaCita != null) {
+            stmt.bindLong(2, fechaCita.getTime());
+        }
     }
 
     @Override
     protected final void bindValues(SQLiteStatement stmt, Citas entity) {
         stmt.clearBindings();
+ 
+        Long codigoCita = entity.getCodigoCita();
+        if (codigoCita != null) {
+            stmt.bindLong(1, codigoCita);
+        }
+ 
+        java.util.Date fechaCita = entity.getFechaCita();
+        if (fechaCita != null) {
+            stmt.bindLong(2, fechaCita.getTime());
+        }
     }
 
     @Override
@@ -63,12 +87,16 @@ public class CitasDao extends AbstractDao<Citas, Void> {
     @Override
     public Citas readEntity(Cursor cursor, int offset) {
         Citas entity = new Citas( //
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // codigoCita
+            cursor.isNull(offset + 1) ? null : new java.util.Date(cursor.getLong(offset + 1)) // fechaCita
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, Citas entity, int offset) {
+        entity.setCodigoCita(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setFechaCita(cursor.isNull(offset + 1) ? null : new java.util.Date(cursor.getLong(offset + 1)));
      }
     
     @Override

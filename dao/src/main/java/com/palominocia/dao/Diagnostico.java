@@ -9,13 +9,43 @@ import org.greenrobot.greendao.annotation.*;
  */
 @Entity
 public class Diagnostico {
+    private Long codigoDiagnostico;
+    private String indicaciones;
+    private java.util.Date fechaDiagnostico;
 
     @Generated
     public Diagnostico() {
     }
 
     @Generated
-    public Diagnostico() {
+    public Diagnostico(Long codigoDiagnostico, String indicaciones, java.util.Date fechaDiagnostico) {
+        this.codigoDiagnostico = codigoDiagnostico;
+        this.indicaciones = indicaciones;
+        this.fechaDiagnostico = fechaDiagnostico;
+    }
+
+    public Long getCodigoDiagnostico() {
+        return codigoDiagnostico;
+    }
+
+    public void setCodigoDiagnostico(Long codigoDiagnostico) {
+        this.codigoDiagnostico = codigoDiagnostico;
+    }
+
+    public String getIndicaciones() {
+        return indicaciones;
+    }
+
+    public void setIndicaciones(String indicaciones) {
+        this.indicaciones = indicaciones;
+    }
+
+    public java.util.Date getFechaDiagnostico() {
+        return fechaDiagnostico;
+    }
+
+    public void setFechaDiagnostico(java.util.Date fechaDiagnostico) {
+        this.fechaDiagnostico = fechaDiagnostico;
     }
 
 }

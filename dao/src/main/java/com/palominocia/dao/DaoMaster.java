@@ -24,11 +24,15 @@ public class DaoMaster extends AbstractDaoMaster {
         ClinicasDao.createTable(db, ifNotExists);
         SedesDao.createTable(db, ifNotExists);
         MedicosDao.createTable(db, ifNotExists);
+        sedeClinicaDao.createTable(db, ifNotExists);
         EspecialidadDao.createTable(db, ifNotExists);
+        MedicoEspecialidadDao.createTable(db, ifNotExists);
         CitasDao.createTable(db, ifNotExists);
         DiagnosticoDao.createTable(db, ifNotExists);
         RecetaDao.createTable(db, ifNotExists);
         MedicinasDao.createTable(db, ifNotExists);
+        RecetaMedicinaDao.createTable(db, ifNotExists);
+        RecetaMedicinaDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -36,11 +40,15 @@ public class DaoMaster extends AbstractDaoMaster {
         ClinicasDao.dropTable(db, ifExists);
         SedesDao.dropTable(db, ifExists);
         MedicosDao.dropTable(db, ifExists);
+        sedeClinicaDao.dropTable(db, ifExists);
         EspecialidadDao.dropTable(db, ifExists);
+        MedicoEspecialidadDao.dropTable(db, ifExists);
         CitasDao.dropTable(db, ifExists);
         DiagnosticoDao.dropTable(db, ifExists);
         RecetaDao.dropTable(db, ifExists);
         MedicinasDao.dropTable(db, ifExists);
+        RecetaMedicinaDao.dropTable(db, ifExists);
+        RecetaMedicinaDao.dropTable(db, ifExists);
     }
 
     /**
@@ -62,11 +70,15 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(ClinicasDao.class);
         registerDaoClass(SedesDao.class);
         registerDaoClass(MedicosDao.class);
+        registerDaoClass(sedeClinicaDao.class);
         registerDaoClass(EspecialidadDao.class);
+        registerDaoClass(MedicoEspecialidadDao.class);
         registerDaoClass(CitasDao.class);
         registerDaoClass(DiagnosticoDao.class);
         registerDaoClass(RecetaDao.class);
         registerDaoClass(MedicinasDao.class);
+        registerDaoClass(RecetaMedicinaDao.class);
+        registerDaoClass(RecetaMedicinaDao.class);
     }
 
     public DaoSession newSession() {

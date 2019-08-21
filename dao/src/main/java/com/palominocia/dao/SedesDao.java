@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "SEDES".
 */
-public class SedesDao extends AbstractDao<Sedes, Integer> {
+public class SedesDao extends AbstractDao<Sedes, Long> {
 
     public static final String TABLENAME = "SEDES";
 
@@ -22,9 +22,13 @@ public class SedesDao extends AbstractDao<Sedes, Integer> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property CodigoSede = new Property(0, Integer.class, "codigoSede", true, "CODIGO_SEDE");
+        public final static Property CodigoSede = new Property(0, long.class, "codigoSede", true, "CODIGO_SEDE");
         public final static Property NombreSede = new Property(1, String.class, "NombreSede", false, "NOMBRE_SEDE");
+        public final static Property DireccionSede = new Property(2, String.class, "DireccionSede", false, "DIRECCION_SEDE");
+        public final static Property TelefonoSede = new Property(3, String.class, "TelefonoSede", false, "TELEFONO_SEDE");
     }
+
+    private DaoSession daoSession;
 
 
     public SedesDao(DaoConfig config) {
@@ -33,14 +37,17 @@ public class SedesDao extends AbstractDao<Sedes, Integer> {
     
     public SedesDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"SEDES\" (" + //
-                "\"CODIGO_SEDE\" INTEGER PRIMARY KEY ," + // 0: codigoSede
-                "\"NOMBRE_SEDE\" TEXT);"); // 1: NombreSede
+                "\"CODIGO_SEDE\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: codigoSede
+                "\"NOMBRE_SEDE\" TEXT," + // 1: NombreSede
+                "\"DIRECCION_SEDE\" TEXT," + // 2: DireccionSede
+                "\"TELEFONO_SEDE\" TEXT);"); // 3: TelefonoSede
     }
 
     /** Drops the underlying database table. */
@@ -52,60 +59,83 @@ public class SedesDao extends AbstractDao<Sedes, Integer> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, Sedes entity) {
         stmt.clearBindings();
- 
-        Integer codigoSede = entity.getCodigoSede();
-        if (codigoSede != null) {
-            stmt.bindLong(1, codigoSede);
-        }
+        stmt.bindLong(1, entity.getCodigoSede());
  
         String NombreSede = entity.getNombreSede();
         if (NombreSede != null) {
             stmt.bindString(2, NombreSede);
+        }
+ 
+        String DireccionSede = entity.getDireccionSede();
+        if (DireccionSede != null) {
+            stmt.bindString(3, DireccionSede);
+        }
+ 
+        String TelefonoSede = entity.getTelefonoSede();
+        if (TelefonoSede != null) {
+            stmt.bindString(4, TelefonoSede);
         }
     }
 
     @Override
     protected final void bindValues(SQLiteStatement stmt, Sedes entity) {
         stmt.clearBindings();
- 
-        Integer codigoSede = entity.getCodigoSede();
-        if (codigoSede != null) {
-            stmt.bindLong(1, codigoSede);
-        }
+        stmt.bindLong(1, entity.getCodigoSede());
  
         String NombreSede = entity.getNombreSede();
         if (NombreSede != null) {
             stmt.bindString(2, NombreSede);
         }
+ 
+        String DireccionSede = entity.getDireccionSede();
+        if (DireccionSede != null) {
+            stmt.bindString(3, DireccionSede);
+        }
+ 
+        String TelefonoSede = entity.getTelefonoSede();
+        if (TelefonoSede != null) {
+            stmt.bindString(4, TelefonoSede);
+        }
     }
 
     @Override
-    public Integer readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0);
+    protected final void attachEntity(Sedes entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
+    }
+
+    @Override
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.getLong(offset + 0);
     }    
 
     @Override
     public Sedes readEntity(Cursor cursor, int offset) {
         Sedes entity = new Sedes( //
-            cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0), // codigoSede
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1) // NombreSede
+            cursor.getLong(offset + 0), // codigoSede
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // NombreSede
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // DireccionSede
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // TelefonoSede
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, Sedes entity, int offset) {
-        entity.setCodigoSede(cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0));
+        entity.setCodigoSede(cursor.getLong(offset + 0));
         entity.setNombreSede(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setDireccionSede(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setTelefonoSede(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
      }
     
     @Override
-    protected final Integer updateKeyAfterInsert(Sedes entity, long rowId) {
-        return entity.getCodigoSede();
+    protected final Long updateKeyAfterInsert(Sedes entity, long rowId) {
+        entity.setCodigoSede(rowId);
+        return rowId;
     }
     
     @Override
-    public Integer getKey(Sedes entity) {
+    public Long getKey(Sedes entity) {
         if(entity != null) {
             return entity.getCodigoSede();
         } else {
@@ -115,7 +145,7 @@ public class SedesDao extends AbstractDao<Sedes, Integer> {
 
     @Override
     public boolean hasKey(Sedes entity) {
-        return entity.getCodigoSede() != null;
+        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
     }
 
     @Override

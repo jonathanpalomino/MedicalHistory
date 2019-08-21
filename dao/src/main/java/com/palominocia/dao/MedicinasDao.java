@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "MEDICINAS".
 */
-public class MedicinasDao extends AbstractDao<Medicinas, Void> {
+public class MedicinasDao extends AbstractDao<Medicinas, Long> {
 
     public static final String TABLENAME = "MEDICINAS";
 
@@ -22,6 +22,9 @@ public class MedicinasDao extends AbstractDao<Medicinas, Void> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
+        public final static Property CodigoMedicina = new Property(0, long.class, "codigoMedicina", true, "CODIGO_MEDICINA");
+        public final static Property NombreMedicina = new Property(1, String.class, "nombreMedicina", false, "NOMBRE_MEDICINA");
+        public final static Property PresentacionMedicina = new Property(2, String.class, "presentacionMedicina", false, "PRESENTACION_MEDICINA");
     }
 
 
@@ -37,6 +40,9 @@ public class MedicinasDao extends AbstractDao<Medicinas, Void> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"MEDICINAS\" (" + //
+                "\"CODIGO_MEDICINA\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: codigoMedicina
+                "\"NOMBRE_MEDICINA\" TEXT," + // 1: nombreMedicina
+                "\"PRESENTACION_MEDICINA\" TEXT);"); // 2: presentacionMedicina
     }
 
     /** Drops the underlying database table. */
@@ -48,44 +54,75 @@ public class MedicinasDao extends AbstractDao<Medicinas, Void> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, Medicinas entity) {
         stmt.clearBindings();
+        stmt.bindLong(1, entity.getCodigoMedicina());
+ 
+        String nombreMedicina = entity.getNombreMedicina();
+        if (nombreMedicina != null) {
+            stmt.bindString(2, nombreMedicina);
+        }
+ 
+        String presentacionMedicina = entity.getPresentacionMedicina();
+        if (presentacionMedicina != null) {
+            stmt.bindString(3, presentacionMedicina);
+        }
     }
 
     @Override
     protected final void bindValues(SQLiteStatement stmt, Medicinas entity) {
         stmt.clearBindings();
+        stmt.bindLong(1, entity.getCodigoMedicina());
+ 
+        String nombreMedicina = entity.getNombreMedicina();
+        if (nombreMedicina != null) {
+            stmt.bindString(2, nombreMedicina);
+        }
+ 
+        String presentacionMedicina = entity.getPresentacionMedicina();
+        if (presentacionMedicina != null) {
+            stmt.bindString(3, presentacionMedicina);
+        }
     }
 
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.getLong(offset + 0);
     }    
 
     @Override
     public Medicinas readEntity(Cursor cursor, int offset) {
         Medicinas entity = new Medicinas( //
+            cursor.getLong(offset + 0), // codigoMedicina
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // nombreMedicina
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // presentacionMedicina
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, Medicinas entity, int offset) {
+        entity.setCodigoMedicina(cursor.getLong(offset + 0));
+        entity.setNombreMedicina(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setPresentacionMedicina(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
      }
     
     @Override
-    protected final Void updateKeyAfterInsert(Medicinas entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected final Long updateKeyAfterInsert(Medicinas entity, long rowId) {
+        entity.setCodigoMedicina(rowId);
+        return rowId;
     }
     
     @Override
-    public Void getKey(Medicinas entity) {
-        return null;
+    public Long getKey(Medicinas entity) {
+        if(entity != null) {
+            return entity.getCodigoMedicina();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean hasKey(Medicinas entity) {
-        // TODO
-        return false;
+        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
     }
 
     @Override

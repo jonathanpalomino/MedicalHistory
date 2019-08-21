@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "ESPECIALIDAD".
 */
-public class EspecialidadDao extends AbstractDao<Especialidad, Void> {
+public class EspecialidadDao extends AbstractDao<Especialidad, Long> {
 
     public static final String TABLENAME = "ESPECIALIDAD";
 
@@ -22,7 +22,11 @@ public class EspecialidadDao extends AbstractDao<Especialidad, Void> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
+        public final static Property CodigoEspecialidad = new Property(0, long.class, "codigoEspecialidad", true, "CODIGO_ESPECIALIDAD");
+        public final static Property NombreEspecialidad = new Property(1, String.class, "nombreEspecialidad", false, "NOMBRE_ESPECIALIDAD");
     }
+
+    private DaoSession daoSession;
 
 
     public EspecialidadDao(DaoConfig config) {
@@ -31,12 +35,15 @@ public class EspecialidadDao extends AbstractDao<Especialidad, Void> {
     
     public EspecialidadDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"ESPECIALIDAD\" (" + //
+                "\"CODIGO_ESPECIALIDAD\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: codigoEspecialidad
+                "\"NOMBRE_ESPECIALIDAD\" TEXT);"); // 1: nombreEspecialidad
     }
 
     /** Drops the underlying database table. */
@@ -48,44 +55,69 @@ public class EspecialidadDao extends AbstractDao<Especialidad, Void> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, Especialidad entity) {
         stmt.clearBindings();
+        stmt.bindLong(1, entity.getCodigoEspecialidad());
+ 
+        String nombreEspecialidad = entity.getNombreEspecialidad();
+        if (nombreEspecialidad != null) {
+            stmt.bindString(2, nombreEspecialidad);
+        }
     }
 
     @Override
     protected final void bindValues(SQLiteStatement stmt, Especialidad entity) {
         stmt.clearBindings();
+        stmt.bindLong(1, entity.getCodigoEspecialidad());
+ 
+        String nombreEspecialidad = entity.getNombreEspecialidad();
+        if (nombreEspecialidad != null) {
+            stmt.bindString(2, nombreEspecialidad);
+        }
     }
 
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    protected final void attachEntity(Especialidad entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
+    }
+
+    @Override
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.getLong(offset + 0);
     }    
 
     @Override
     public Especialidad readEntity(Cursor cursor, int offset) {
         Especialidad entity = new Especialidad( //
+            cursor.getLong(offset + 0), // codigoEspecialidad
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1) // nombreEspecialidad
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, Especialidad entity, int offset) {
+        entity.setCodigoEspecialidad(cursor.getLong(offset + 0));
+        entity.setNombreEspecialidad(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
      }
     
     @Override
-    protected final Void updateKeyAfterInsert(Especialidad entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected final Long updateKeyAfterInsert(Especialidad entity, long rowId) {
+        entity.setCodigoEspecialidad(rowId);
+        return rowId;
     }
     
     @Override
-    public Void getKey(Especialidad entity) {
-        return null;
+    public Long getKey(Especialidad entity) {
+        if(entity != null) {
+            return entity.getCodigoEspecialidad();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean hasKey(Especialidad entity) {
-        // TODO
-        return false;
+        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
     }
 
     @Override

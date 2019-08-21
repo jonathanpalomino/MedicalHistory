@@ -22,6 +22,9 @@ public class DiagnosticoDao extends AbstractDao<Diagnostico, Void> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
+        public final static Property CodigoDiagnostico = new Property(0, Long.class, "codigoDiagnostico", false, "CODIGO_DIAGNOSTICO");
+        public final static Property Indicaciones = new Property(1, String.class, "indicaciones", false, "INDICACIONES");
+        public final static Property FechaDiagnostico = new Property(2, java.util.Date.class, "fechaDiagnostico", false, "FECHA_DIAGNOSTICO");
     }
 
 
@@ -37,6 +40,9 @@ public class DiagnosticoDao extends AbstractDao<Diagnostico, Void> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"DIAGNOSTICO\" (" + //
+                "\"CODIGO_DIAGNOSTICO\" INTEGER," + // 0: codigoDiagnostico
+                "\"INDICACIONES\" TEXT," + // 1: indicaciones
+                "\"FECHA_DIAGNOSTICO\" INTEGER);"); // 2: fechaDiagnostico
     }
 
     /** Drops the underlying database table. */
@@ -48,11 +54,41 @@ public class DiagnosticoDao extends AbstractDao<Diagnostico, Void> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, Diagnostico entity) {
         stmt.clearBindings();
+ 
+        Long codigoDiagnostico = entity.getCodigoDiagnostico();
+        if (codigoDiagnostico != null) {
+            stmt.bindLong(1, codigoDiagnostico);
+        }
+ 
+        String indicaciones = entity.getIndicaciones();
+        if (indicaciones != null) {
+            stmt.bindString(2, indicaciones);
+        }
+ 
+        java.util.Date fechaDiagnostico = entity.getFechaDiagnostico();
+        if (fechaDiagnostico != null) {
+            stmt.bindLong(3, fechaDiagnostico.getTime());
+        }
     }
 
     @Override
     protected final void bindValues(SQLiteStatement stmt, Diagnostico entity) {
         stmt.clearBindings();
+ 
+        Long codigoDiagnostico = entity.getCodigoDiagnostico();
+        if (codigoDiagnostico != null) {
+            stmt.bindLong(1, codigoDiagnostico);
+        }
+ 
+        String indicaciones = entity.getIndicaciones();
+        if (indicaciones != null) {
+            stmt.bindString(2, indicaciones);
+        }
+ 
+        java.util.Date fechaDiagnostico = entity.getFechaDiagnostico();
+        if (fechaDiagnostico != null) {
+            stmt.bindLong(3, fechaDiagnostico.getTime());
+        }
     }
 
     @Override
@@ -63,12 +99,18 @@ public class DiagnosticoDao extends AbstractDao<Diagnostico, Void> {
     @Override
     public Diagnostico readEntity(Cursor cursor, int offset) {
         Diagnostico entity = new Diagnostico( //
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // codigoDiagnostico
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // indicaciones
+            cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)) // fechaDiagnostico
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, Diagnostico entity, int offset) {
+        entity.setCodigoDiagnostico(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setIndicaciones(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setFechaDiagnostico(cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)));
      }
     
     @Override

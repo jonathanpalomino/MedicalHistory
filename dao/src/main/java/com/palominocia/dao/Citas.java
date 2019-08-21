@@ -9,13 +9,33 @@ import org.greenrobot.greendao.annotation.*;
  */
 @Entity
 public class Citas {
+    private Long codigoCita;
+    private java.util.Date fechaCita;
 
     @Generated
     public Citas() {
     }
 
     @Generated
-    public Citas() {
+    public Citas(Long codigoCita, java.util.Date fechaCita) {
+        this.codigoCita = codigoCita;
+        this.fechaCita = fechaCita;
+    }
+
+    public Long getCodigoCita() {
+        return codigoCita;
+    }
+
+    public void setCodigoCita(Long codigoCita) {
+        this.codigoCita = codigoCita;
+    }
+
+    public java.util.Date getFechaCita() {
+        return fechaCita;
+    }
+
+    public void setFechaCita(java.util.Date fechaCita) {
+        this.fechaCita = fechaCita;
     }
 
 }

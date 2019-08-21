@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "MEDICOS".
 */
-public class MedicosDao extends AbstractDao<Medicos, Void> {
+public class MedicosDao extends AbstractDao<Medicos, Long> {
 
     public static final String TABLENAME = "MEDICOS";
 
@@ -22,7 +22,12 @@ public class MedicosDao extends AbstractDao<Medicos, Void> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
+        public final static Property CodigoMedico = new Property(0, long.class, "codigoMedico", true, "CODIGO_MEDICO");
+        public final static Property NombreMedico = new Property(1, String.class, "nombreMedico", false, "NOMBRE_MEDICO");
+        public final static Property UrlMedico = new Property(2, String.class, "urlMedico", false, "URL_MEDICO");
     }
+
+    private DaoSession daoSession;
 
 
     public MedicosDao(DaoConfig config) {
@@ -31,12 +36,16 @@ public class MedicosDao extends AbstractDao<Medicos, Void> {
     
     public MedicosDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"MEDICOS\" (" + //
+                "\"CODIGO_MEDICO\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: codigoMedico
+                "\"NOMBRE_MEDICO\" TEXT," + // 1: nombreMedico
+                "\"URL_MEDICO\" TEXT);"); // 2: urlMedico
     }
 
     /** Drops the underlying database table. */
@@ -48,44 +57,81 @@ public class MedicosDao extends AbstractDao<Medicos, Void> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, Medicos entity) {
         stmt.clearBindings();
+        stmt.bindLong(1, entity.getCodigoMedico());
+ 
+        String nombreMedico = entity.getNombreMedico();
+        if (nombreMedico != null) {
+            stmt.bindString(2, nombreMedico);
+        }
+ 
+        String urlMedico = entity.getUrlMedico();
+        if (urlMedico != null) {
+            stmt.bindString(3, urlMedico);
+        }
     }
 
     @Override
     protected final void bindValues(SQLiteStatement stmt, Medicos entity) {
         stmt.clearBindings();
+        stmt.bindLong(1, entity.getCodigoMedico());
+ 
+        String nombreMedico = entity.getNombreMedico();
+        if (nombreMedico != null) {
+            stmt.bindString(2, nombreMedico);
+        }
+ 
+        String urlMedico = entity.getUrlMedico();
+        if (urlMedico != null) {
+            stmt.bindString(3, urlMedico);
+        }
     }
 
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    protected final void attachEntity(Medicos entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
+    }
+
+    @Override
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.getLong(offset + 0);
     }    
 
     @Override
     public Medicos readEntity(Cursor cursor, int offset) {
         Medicos entity = new Medicos( //
+            cursor.getLong(offset + 0), // codigoMedico
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // nombreMedico
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // urlMedico
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, Medicos entity, int offset) {
+        entity.setCodigoMedico(cursor.getLong(offset + 0));
+        entity.setNombreMedico(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setUrlMedico(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
      }
     
     @Override
-    protected final Void updateKeyAfterInsert(Medicos entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected final Long updateKeyAfterInsert(Medicos entity, long rowId) {
+        entity.setCodigoMedico(rowId);
+        return rowId;
     }
     
     @Override
-    public Void getKey(Medicos entity) {
-        return null;
+    public Long getKey(Medicos entity) {
+        if(entity != null) {
+            return entity.getCodigoMedico();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean hasKey(Medicos entity) {
-        // TODO
-        return false;
+        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
     }
 
     @Override

@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "CLINICAS".
 */
-public class ClinicasDao extends AbstractDao<Clinicas, Integer> {
+public class ClinicasDao extends AbstractDao<Clinicas, Long> {
 
     public static final String TABLENAME = "CLINICAS";
 
@@ -22,7 +22,7 @@ public class ClinicasDao extends AbstractDao<Clinicas, Integer> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property CodigoClinica = new Property(0, Integer.class, "codigoClinica", true, "CODIGO_CLINICA");
+        public final static Property CodigoClinica = new Property(0, long.class, "codigoClinica", true, "CODIGO_CLINICA");
         public final static Property NombreClinica = new Property(1, String.class, "NombreClinica", false, "NOMBRE_CLINICA");
     }
 
@@ -39,7 +39,7 @@ public class ClinicasDao extends AbstractDao<Clinicas, Integer> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"CLINICAS\" (" + //
-                "\"CODIGO_CLINICA\" INTEGER PRIMARY KEY ," + // 0: codigoClinica
+                "\"CODIGO_CLINICA\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: codigoClinica
                 "\"NOMBRE_CLINICA\" TEXT);"); // 1: NombreClinica
     }
 
@@ -52,11 +52,7 @@ public class ClinicasDao extends AbstractDao<Clinicas, Integer> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, Clinicas entity) {
         stmt.clearBindings();
- 
-        Integer codigoClinica = entity.getCodigoClinica();
-        if (codigoClinica != null) {
-            stmt.bindLong(1, codigoClinica);
-        }
+        stmt.bindLong(1, entity.getCodigoClinica());
  
         String NombreClinica = entity.getNombreClinica();
         if (NombreClinica != null) {
@@ -67,11 +63,7 @@ public class ClinicasDao extends AbstractDao<Clinicas, Integer> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, Clinicas entity) {
         stmt.clearBindings();
- 
-        Integer codigoClinica = entity.getCodigoClinica();
-        if (codigoClinica != null) {
-            stmt.bindLong(1, codigoClinica);
-        }
+        stmt.bindLong(1, entity.getCodigoClinica());
  
         String NombreClinica = entity.getNombreClinica();
         if (NombreClinica != null) {
@@ -80,14 +72,14 @@ public class ClinicasDao extends AbstractDao<Clinicas, Integer> {
     }
 
     @Override
-    public Integer readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0);
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.getLong(offset + 0);
     }    
 
     @Override
     public Clinicas readEntity(Cursor cursor, int offset) {
         Clinicas entity = new Clinicas( //
-            cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0), // codigoClinica
+            cursor.getLong(offset + 0), // codigoClinica
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1) // NombreClinica
         );
         return entity;
@@ -95,17 +87,18 @@ public class ClinicasDao extends AbstractDao<Clinicas, Integer> {
      
     @Override
     public void readEntity(Cursor cursor, Clinicas entity, int offset) {
-        entity.setCodigoClinica(cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0));
+        entity.setCodigoClinica(cursor.getLong(offset + 0));
         entity.setNombreClinica(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
      }
     
     @Override
-    protected final Integer updateKeyAfterInsert(Clinicas entity, long rowId) {
-        return entity.getCodigoClinica();
+    protected final Long updateKeyAfterInsert(Clinicas entity, long rowId) {
+        entity.setCodigoClinica(rowId);
+        return rowId;
     }
     
     @Override
-    public Integer getKey(Clinicas entity) {
+    public Long getKey(Clinicas entity) {
         if(entity != null) {
             return entity.getCodigoClinica();
         } else {
@@ -115,7 +108,7 @@ public class ClinicasDao extends AbstractDao<Clinicas, Integer> {
 
     @Override
     public boolean hasKey(Clinicas entity) {
-        return entity.getCodigoClinica() != null;
+        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
     }
 
     @Override

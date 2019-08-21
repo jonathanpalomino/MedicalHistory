@@ -10,29 +10,29 @@ import org.greenrobot.greendao.annotation.*;
 @Entity
 public class Clinicas {
 
-    @Id
-    private Integer codigoClinica;
+    @Id(autoincrement = true)
+    private long codigoClinica;
     private String NombreClinica;
 
     @Generated
     public Clinicas() {
     }
 
-    public Clinicas(Integer codigoClinica) {
+    public Clinicas(long codigoClinica) {
         this.codigoClinica = codigoClinica;
     }
 
     @Generated
-    public Clinicas(Integer codigoClinica, String NombreClinica) {
+    public Clinicas(long codigoClinica, String NombreClinica) {
         this.codigoClinica = codigoClinica;
         this.NombreClinica = NombreClinica;
     }
 
-    public Integer getCodigoClinica() {
+    public long getCodigoClinica() {
         return codigoClinica;
     }
 
-    public void setCodigoClinica(Integer codigoClinica) {
+    public void setCodigoClinica(long codigoClinica) {
         this.codigoClinica = codigoClinica;
     }
 

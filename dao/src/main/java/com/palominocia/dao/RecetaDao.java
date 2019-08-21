@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "RECETA".
 */
-public class RecetaDao extends AbstractDao<Receta, Void> {
+public class RecetaDao extends AbstractDao<Receta, Long> {
 
     public static final String TABLENAME = "RECETA";
 
@@ -22,7 +22,11 @@ public class RecetaDao extends AbstractDao<Receta, Void> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
+        public final static Property CodigoReceta = new Property(0, long.class, "codigoReceta", true, "CODIGO_RECETA");
+        public final static Property FechaReceta = new Property(1, java.util.Date.class, "fechaReceta", false, "FECHA_RECETA");
     }
+
+    private DaoSession daoSession;
 
 
     public RecetaDao(DaoConfig config) {
@@ -31,12 +35,15 @@ public class RecetaDao extends AbstractDao<Receta, Void> {
     
     public RecetaDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"RECETA\" (" + //
+                "\"CODIGO_RECETA\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: codigoReceta
+                "\"FECHA_RECETA\" INTEGER);"); // 1: fechaReceta
     }
 
     /** Drops the underlying database table. */
@@ -48,44 +55,69 @@ public class RecetaDao extends AbstractDao<Receta, Void> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, Receta entity) {
         stmt.clearBindings();
+        stmt.bindLong(1, entity.getCodigoReceta());
+ 
+        java.util.Date fechaReceta = entity.getFechaReceta();
+        if (fechaReceta != null) {
+            stmt.bindLong(2, fechaReceta.getTime());
+        }
     }
 
     @Override
     protected final void bindValues(SQLiteStatement stmt, Receta entity) {
         stmt.clearBindings();
+        stmt.bindLong(1, entity.getCodigoReceta());
+ 
+        java.util.Date fechaReceta = entity.getFechaReceta();
+        if (fechaReceta != null) {
+            stmt.bindLong(2, fechaReceta.getTime());
+        }
     }
 
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    protected final void attachEntity(Receta entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
+    }
+
+    @Override
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.getLong(offset + 0);
     }    
 
     @Override
     public Receta readEntity(Cursor cursor, int offset) {
         Receta entity = new Receta( //
+            cursor.getLong(offset + 0), // codigoReceta
+            cursor.isNull(offset + 1) ? null : new java.util.Date(cursor.getLong(offset + 1)) // fechaReceta
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, Receta entity, int offset) {
+        entity.setCodigoReceta(cursor.getLong(offset + 0));
+        entity.setFechaReceta(cursor.isNull(offset + 1) ? null : new java.util.Date(cursor.getLong(offset + 1)));
      }
     
     @Override
-    protected final Void updateKeyAfterInsert(Receta entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected final Long updateKeyAfterInsert(Receta entity, long rowId) {
+        entity.setCodigoReceta(rowId);
+        return rowId;
     }
     
     @Override
-    public Void getKey(Receta entity) {
-        return null;
+    public Long getKey(Receta entity) {
+        if(entity != null) {
+            return entity.getCodigoReceta();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean hasKey(Receta entity) {
-        // TODO
-        return false;
+        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
     }
 
     @Override
