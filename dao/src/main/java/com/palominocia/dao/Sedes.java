@@ -31,7 +31,7 @@ public class Sedes {
     @ToMany(joinProperties = {
         @JoinProperty(name = "codigoSede", referencedName = "codigoSede")
     })
-    private List<sedeClinica> sedeClinicaList;
+    private List<sedeClinica> codigoSede1;
 
     @Generated
     public Sedes() {
@@ -90,24 +90,24 @@ public class Sedes {
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
     @Generated
-    public List<sedeClinica> getSedeClinicaList() {
-        if (sedeClinicaList == null) {
+    public List<sedeClinica> getCodigoSede1() {
+        if (codigoSede1 == null) {
             __throwIfDetached();
             sedeClinicaDao targetDao = daoSession.getSedeClinicaDao();
-            List<sedeClinica> sedeClinicaListNew = targetDao._querySedes_SedeClinicaList(codigoSede);
+            List<sedeClinica> codigoSede1New = targetDao._querySedes_CodigoSede1(codigoSede);
             synchronized (this) {
-                if(sedeClinicaList == null) {
-                    sedeClinicaList = sedeClinicaListNew;
+                if(codigoSede1 == null) {
+                    codigoSede1 = codigoSede1New;
                 }
             }
         }
-        return sedeClinicaList;
+        return codigoSede1;
     }
 
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     @Generated
-    public synchronized void resetSedeClinicaList() {
-        sedeClinicaList = null;
+    public synchronized void resetCodigoSede1() {
+        codigoSede1 = null;
     }
 
     /**

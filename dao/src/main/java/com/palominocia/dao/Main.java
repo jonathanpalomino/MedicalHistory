@@ -28,8 +28,6 @@ public class Main {
         sedes.addStringProperty("DireccionSede");
         sedes.addStringProperty("TelefonoSede");
 
-        //ToMany manySedes = clinicas.addToMany(sedes,codigoSede);
-        //manySedes.setName("codigoSede");
 
         Entity medico= schema.addEntity("Medicos");
         Property codigoMedico = medico.addLongProperty("codigoMedico")
@@ -41,8 +39,8 @@ public class Main {
         medico.addStringProperty("urlMedico");
 
         Entity sedeClinica= schema.addEntity("sedeClinica");
-        sedes.addToMany(sedeClinica,codigoSede);//.setName("codigoSedeRef");
-        medico.addToMany(sedeClinica,codigoMedico);//.setName("codigoMedicoRef");
+        sedes.addToMany(sedeClinica,codigoSede).setName("codigoSede1");
+        medico.addToMany(sedeClinica,codigoMedico).setName("codigoMedico1");
 
         Entity especialidad= schema.addEntity("Especialidad");
         Property codigoEspecialidad = especialidad.addLongProperty("codigoEspecialidad")
@@ -55,8 +53,8 @@ public class Main {
         Entity medicoEspecialidad= schema.addEntity("MedicoEspecialidad");
         medicoEspecialidad.addStringProperty("mcaEspecialidadActiva");
 
-        especialidad.addToMany(medicoEspecialidad,codigoEspecialidad);//.setName("codigoEspecialidadRef");
-        medico.addToMany(medicoEspecialidad,codigoMedico);//.setName("codigoMedicoRef");
+        especialidad.addToMany(medicoEspecialidad,codigoEspecialidad).setName("codigoEspecialidad2");
+        medico.addToMany(medicoEspecialidad,codigoMedico).setName("codigoMedico2");
 
         Entity citas= schema.addEntity("Citas");
         citas.addLongProperty("codigoCita");

@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.palominocia.dao.DaoMaster;
 import com.palominocia.medicalhistory.beans.MedicoBean;
 import com.palominocia.medicalhistory.fragments.MedicosFragment;
 import com.palominocia.medicalhistory.searcher.SeachEngine;
@@ -167,6 +168,7 @@ public class Navegador extends AppCompatActivity
             boolean retorno=true;
             Log.i("ObtenerMedicosTask","Inicio doInBackground");
             listamedicos.clear();
+
             SeachEngine f1 = new SeachEngine<MedicoBean>();
             listamedicos = f1.seachElements(MedicoBean.class,"LIMATAMBO",true);
             //listamedicos = new ArrayList<>(listamedicos.subList(0,5));

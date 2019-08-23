@@ -29,8 +29,8 @@ public class sedeClinicaDao extends AbstractDao<sedeClinica, Void> {
         public final static Property CodigoMedico = new Property(1, long.class, "codigoMedico", true, "CODIGO_MEDICO");
     }
 
-    private Query<sedeClinica> sedes_SedeClinicaListQuery;
-    private Query<sedeClinica> medicos_SedeClinicaListQuery;
+    private Query<sedeClinica> sedes_CodigoSede1Query;
+    private Query<sedeClinica> medicos_CodigoMedico1Query;
 
     public sedeClinicaDao(DaoConfig config) {
         super(config);
@@ -102,30 +102,30 @@ public class sedeClinicaDao extends AbstractDao<sedeClinica, Void> {
         return true;
     }
     
-    /** Internal query to resolve the "sedeClinicaList" to-many relationship of Sedes. */
-    public List<sedeClinica> _querySedes_SedeClinicaList(long codigoSede) {
+    /** Internal query to resolve the "codigoSede1" to-many relationship of Sedes. */
+    public List<sedeClinica> _querySedes_CodigoSede1(long codigoSede) {
         synchronized (this) {
-            if (sedes_SedeClinicaListQuery == null) {
+            if (sedes_CodigoSede1Query == null) {
                 QueryBuilder<sedeClinica> queryBuilder = queryBuilder();
                 queryBuilder.where(Properties.CodigoSede.eq(null));
-                sedes_SedeClinicaListQuery = queryBuilder.build();
+                sedes_CodigoSede1Query = queryBuilder.build();
             }
         }
-        Query<sedeClinica> query = sedes_SedeClinicaListQuery.forCurrentThread();
+        Query<sedeClinica> query = sedes_CodigoSede1Query.forCurrentThread();
         query.setParameter(0, codigoSede);
         return query.list();
     }
 
-    /** Internal query to resolve the "sedeClinicaList" to-many relationship of Medicos. */
-    public List<sedeClinica> _queryMedicos_SedeClinicaList(long codigoMedico) {
+    /** Internal query to resolve the "codigoMedico1" to-many relationship of Medicos. */
+    public List<sedeClinica> _queryMedicos_CodigoMedico1(long codigoMedico) {
         synchronized (this) {
-            if (medicos_SedeClinicaListQuery == null) {
+            if (medicos_CodigoMedico1Query == null) {
                 QueryBuilder<sedeClinica> queryBuilder = queryBuilder();
                 queryBuilder.where(Properties.CodigoMedico.eq(null));
-                medicos_SedeClinicaListQuery = queryBuilder.build();
+                medicos_CodigoMedico1Query = queryBuilder.build();
             }
         }
-        Query<sedeClinica> query = medicos_SedeClinicaListQuery.forCurrentThread();
+        Query<sedeClinica> query = medicos_CodigoMedico1Query.forCurrentThread();
         query.setParameter(0, codigoMedico);
         return query.list();
     }
