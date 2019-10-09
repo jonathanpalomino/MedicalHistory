@@ -4,11 +4,11 @@ import org.greenrobot.greendao.generator.DaoGenerator;
 import org.greenrobot.greendao.generator.Entity;
 import org.greenrobot.greendao.generator.Property;
 import org.greenrobot.greendao.generator.Schema;
-import org.greenrobot.greendao.generator.ToMany;
 
 public class Main {
     public static void main(String args[]) throws Exception {
-        Schema schema = new Schema(1, "com.palominocia.dao");
+        Schema schema = new Schema(1, "com.palominocia.medicalhistory.dao");
+        schema.enableKeepSectionsByDefault();
 
         Entity clinicas= schema.addEntity("Clinicas");
         Property codigoClinica = clinicas.addLongProperty("codigoClinica")
@@ -38,9 +38,10 @@ public class Main {
         medico.addStringProperty("nombreMedico");
         medico.addStringProperty("urlMedico");
 
-        Entity sedeClinica= schema.addEntity("sedeClinica");
-        sedes.addToMany(sedeClinica,codigoSede).setName("codigoSede1");
-        medico.addToMany(sedeClinica,codigoMedico).setName("codigoMedico1");
+        Entity sedeClinica= schema.addEntity("SedeClinica");
+        sedeClinica.addStringProperty("ddd");
+        //sedes.addToMany(sedeClinica,codigoSede);
+        //medico.addToMany(sedeClinica,codigoMedico);
 
         Entity especialidad= schema.addEntity("Especialidad");
         Property codigoEspecialidad = especialidad.addLongProperty("codigoEspecialidad")
@@ -53,8 +54,8 @@ public class Main {
         Entity medicoEspecialidad= schema.addEntity("MedicoEspecialidad");
         medicoEspecialidad.addStringProperty("mcaEspecialidadActiva");
 
-        especialidad.addToMany(medicoEspecialidad,codigoEspecialidad).setName("codigoEspecialidad2");
-        medico.addToMany(medicoEspecialidad,codigoMedico).setName("codigoMedico2");
+        //medico.addToMany(medicoEspecialidad,codigoMedico);
+        //especialidad.addToMany(medicoEspecialidad,codigoEspecialidad);
 
         Entity citas= schema.addEntity("Citas");
         citas.addLongProperty("codigoCita");
@@ -84,10 +85,10 @@ public class Main {
         medicinas.addStringProperty("nombreMedicina");
         medicinas.addStringProperty("presentacionMedicina");
 
-        Entity recetaMedicina= schema.addEntity("RecetaMedicina");
-        receta.addToMany(recetaMedicina,codigoMedicina);
+        /*Entity recetaMedicina= schema.addEntity("RecetaMedicina");
+        receta.addToMany(recetaMedicina,codigoMedicina);*/
 
-        Entity paciente= schema.addEntity("RecetaMedicina");
+        Entity paciente= schema.addEntity("Paciente");
         Property codigoPaciente = paciente.addLongProperty("codigoPaciente")
                                     .notNull()
                                     .primaryKey()
@@ -96,6 +97,6 @@ public class Main {
         paciente.addStringProperty("nombrePaciente");
         paciente.addDateProperty("fecNacimientoPaciente");
 
-        new DaoGenerator().generateAll(schema, "./dao/src/main/java");
+        new DaoGenerator().generateAll(schema, "./app/src/main/java");
     }
 }

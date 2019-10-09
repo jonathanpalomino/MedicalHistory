@@ -1,4 +1,4 @@
-package com.palominocia.dao;
+package com.palominocia.medicalhistory.dao;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
@@ -26,8 +26,6 @@ public class RecetaDao extends AbstractDao<Receta, Long> {
         public final static Property FechaReceta = new Property(1, java.util.Date.class, "fechaReceta", false, "FECHA_RECETA");
     }
 
-    private DaoSession daoSession;
-
 
     public RecetaDao(DaoConfig config) {
         super(config);
@@ -35,7 +33,6 @@ public class RecetaDao extends AbstractDao<Receta, Long> {
     
     public RecetaDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -72,12 +69,6 @@ public class RecetaDao extends AbstractDao<Receta, Long> {
         if (fechaReceta != null) {
             stmt.bindLong(2, fechaReceta.getTime());
         }
-    }
-
-    @Override
-    protected final void attachEntity(Receta entity) {
-        super.attachEntity(entity);
-        entity.__setDaoSession(daoSession);
     }
 
     @Override

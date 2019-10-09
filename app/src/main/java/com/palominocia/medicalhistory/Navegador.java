@@ -19,9 +19,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.palominocia.dao.DaoMaster;
 import com.palominocia.medicalhistory.beans.MedicoBean;
+import com.palominocia.medicalhistory.dao.DaoSession;
+import com.palominocia.medicalhistory.dao.Medicos;
+import com.palominocia.medicalhistory.dao.MedicosDao;
 import com.palominocia.medicalhistory.fragments.MedicosFragment;
 import com.palominocia.medicalhistory.searcher.SeachEngine;
 
@@ -33,6 +34,8 @@ public class Navegador extends AppCompatActivity
     private ArrayList<MedicoBean> listamedicos;
 
     ObtenerMedicosTask obtenerMedicosTask;
+
+    DaoSession daoSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,8 @@ public class Navegador extends AppCompatActivity
         navUsername.setText(getIntent().getStringExtra("Nombre"));
         TextView navEmail =  headerView.findViewById(R.id.txtEmailNav);
         navEmail.setText(getIntent().getStringExtra("Email"));
+
+        daoSession = ((AppController) getApplication()).getDaoSession();
     }
 
     @Override
@@ -169,12 +174,33 @@ public class Navegador extends AppCompatActivity
             Log.i("ObtenerMedicosTask","Inicio doInBackground");
             listamedicos.clear();
 
-            SeachEngine f1 = new SeachEngine<MedicoBean>();
-            listamedicos = f1.seachElements(MedicoBean.class,"LIMATAMBO",true);
-            //listamedicos = new ArrayList<>(listamedicos.subList(0,5));
+            listamedicos = obtenerMedicosRemoto();
             Log.i("ObtenerEmailTask","Fin doInBackground");
             return retorno;
         }
+
+        private ArrayList<MedicoBean> obtenerMedicosRemoto() {
+            Log.i("ObtenerMedicosTask","obtenerMedicosRemoto 1");
+
+            Log.i("ObtenerMedicosTask","obtenerMedicosRemoto 2");
+            MedicosDao med = daoSession.getMedicosDao();
+
+            SeachEngine f1 = new SeachEngine<MedicoBean>();
+            if (med.count()>0){
+                //med.loadAll()
+            }
+            else{
+                listamedicos = f1.seachElements(MedicoBean.class,"LIMATAMBO",true);
+                for(MedicoBean data: listamedicos){
+                    Medicos mm = new Medicos();
+                    mm.setNombreMedico(data.getNombre());
+                    med.insertOrReplace(mm);
+                }
+            }
+
+            return listamedicos;
+        }
+
         @Override
         protected void onPostExecute(Boolean sucess) {
             if(sucess){

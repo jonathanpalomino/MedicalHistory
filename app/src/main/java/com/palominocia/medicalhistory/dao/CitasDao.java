@@ -1,4 +1,4 @@
-package com.palominocia.dao;
+package com.palominocia.medicalhistory.dao;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;

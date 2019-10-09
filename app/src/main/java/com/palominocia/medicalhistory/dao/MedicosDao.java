@@ -1,4 +1,4 @@
-package com.palominocia.dao;
+package com.palominocia.medicalhistory.dao;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
@@ -27,8 +27,6 @@ public class MedicosDao extends AbstractDao<Medicos, Long> {
         public final static Property UrlMedico = new Property(2, String.class, "urlMedico", false, "URL_MEDICO");
     }
 
-    private DaoSession daoSession;
-
 
     public MedicosDao(DaoConfig config) {
         super(config);
@@ -36,7 +34,6 @@ public class MedicosDao extends AbstractDao<Medicos, Long> {
     
     public MedicosDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -84,12 +81,6 @@ public class MedicosDao extends AbstractDao<Medicos, Long> {
         if (urlMedico != null) {
             stmt.bindString(3, urlMedico);
         }
-    }
-
-    @Override
-    protected final void attachEntity(Medicos entity) {
-        super.attachEntity(entity);
-        entity.__setDaoSession(daoSession);
     }
 
     @Override

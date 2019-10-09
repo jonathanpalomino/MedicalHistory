@@ -1,4 +1,4 @@
-package com.palominocia.dao;
+package com.palominocia.medicalhistory.dao;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
@@ -28,8 +28,6 @@ public class SedesDao extends AbstractDao<Sedes, Long> {
         public final static Property TelefonoSede = new Property(3, String.class, "TelefonoSede", false, "TELEFONO_SEDE");
     }
 
-    private DaoSession daoSession;
-
 
     public SedesDao(DaoConfig config) {
         super(config);
@@ -37,7 +35,6 @@ public class SedesDao extends AbstractDao<Sedes, Long> {
     
     public SedesDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -96,12 +93,6 @@ public class SedesDao extends AbstractDao<Sedes, Long> {
         if (TelefonoSede != null) {
             stmt.bindString(4, TelefonoSede);
         }
-    }
-
-    @Override
-    protected final void attachEntity(Sedes entity) {
-        super.attachEntity(entity);
-        entity.__setDaoSession(daoSession);
     }
 
     @Override
