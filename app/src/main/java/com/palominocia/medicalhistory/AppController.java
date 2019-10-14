@@ -17,7 +17,7 @@ public class AppController extends Application {
     public void onCreate() {
         super.onCreate();
 
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this,"medical_data"); //The users-db here is the name of our database.
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this,"medical_data.db"); //The users-db here is the name of our database.
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
 

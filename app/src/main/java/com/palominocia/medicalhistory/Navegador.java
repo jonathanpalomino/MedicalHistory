@@ -181,20 +181,24 @@ public class Navegador extends AppCompatActivity
 
         private ArrayList<MedicoBean> obtenerMedicosRemoto() {
             Log.i("ObtenerMedicosTask","obtenerMedicosRemoto 1");
-
-            Log.i("ObtenerMedicosTask","obtenerMedicosRemoto 2");
             MedicosDao med = daoSession.getMedicosDao();
-
-            SeachEngine f1 = new SeachEngine<MedicoBean>();
             if (med.count()>0){
-                //med.loadAll()
+                for(Medicos data : med.loadAll()){
+                    MedicoBean bean = new MedicoBean();
+                    bean.setNombre(data.getNombreMedico());
+                    bean.setUrlImage(data.getUrlMedico());
+                    listamedicos.add(bean);
+                }
             }
             else{
+                SeachEngine f1 = new SeachEngine<MedicoBean>();
                 listamedicos = f1.seachElements(MedicoBean.class,"LIMATAMBO",true);
                 for(MedicoBean data: listamedicos){
+                    //med = daoSession.getMedicosDao();
                     Medicos mm = new Medicos();
                     mm.setNombreMedico(data.getNombre());
-                    med.insertOrReplace(mm);
+                    mm.setUrlMedico(data.getUrlImage());
+                    med.insert(mm);
                 }
             }
 
