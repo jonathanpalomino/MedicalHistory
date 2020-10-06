@@ -3,37 +3,43 @@ package com.palominocia.medicalhistory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.View;
 import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.MenuItem;
-import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.palominocia.medicalhistory.beans.ClinicaBean;
 import com.palominocia.medicalhistory.beans.MedicoBean;
 import com.palominocia.medicalhistory.dao.DaoSession;
 import com.palominocia.medicalhistory.dao.Medicos;
 import com.palominocia.medicalhistory.dao.MedicosDao;
+import com.palominocia.medicalhistory.fragments.ClinicasFragment;
 import com.palominocia.medicalhistory.fragments.MedicosFragment;
 import com.palominocia.medicalhistory.searcher.SeachEngine;
 
 import java.util.ArrayList;
 
 public class Navegador extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MedicosFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, MedicosFragment.OnFragmentInteractionListener
+    ,ClinicasFragment.OnFragmentInteractionListener
+{
 
     private ArrayList<MedicoBean> listamedicos;
+    private ArrayList<ClinicaBean> listaclinicas;
 
     ObtenerMedicosTask obtenerMedicosTask;
+    ObtenerClinicasTask obtenerClinicasTask;
 
     DaoSession daoSession;
 
@@ -105,7 +111,7 @@ public class Navegador extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_medicos) {
             listamedicos =new ArrayList<MedicoBean>();
-            invokeDynamicFragment("",listamedicos);
+            invokeDynamicFragment("MEDICOS",listamedicos);
         } else if (id == R.id.nav_recetas) {
 
         } else if (id == R.id.nav_diagnosticos) {
@@ -114,6 +120,10 @@ public class Navegador extends AppCompatActivity
 
         } else if (id == R.id.nav_medicinas_alergia) {
 
+        }
+        else if (id == R.id.nav_clinicas) {
+            listaclinicas =  new ArrayList<ClinicaBean>();
+            invokeDynamicFragment("CLINICAS",listaclinicas);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -126,14 +136,20 @@ public class Navegador extends AppCompatActivity
         obtenerMedicosTask.execute((Void) null);
     }
 
-    private void invokeDynamicFragment(String tituloItem, ArrayList<MedicoBean> listaMensajes) {
+    private void invokeDynamicFragment(String tituloItem, ArrayList listaMensajes) {
         Fragment fragment = null;
         Class fragmentClass = null;
         Bundle args = new Bundle();
         args.putString("ID_ITEM",tituloItem);
         args.putSerializable("LISTA_VIEWS",listaMensajes);
 
-        fragmentClass = MedicosFragment.class;
+        if (tituloItem.equals("MEDICOS")){
+            fragmentClass = MedicosFragment.class;
+        }
+        if (tituloItem.equals("CLINICAS")){
+            fragmentClass = ClinicasFragment.class;
+        }
+
         try {
             fragment = (Fragment) fragmentClass.newInstance();
             fragment.setArguments(args);//Asigno argumentos
@@ -153,6 +169,16 @@ public class Navegador extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
         Toast.makeText(this,"onFragmentInteraction Invoca un Uri", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onRefrescarClinicas() {
+        obtenerClinicas();
+    }
+
+    private void obtenerClinicas() {
+        obtenerClinicasTask = new ObtenerClinicasTask("");
+        obtenerClinicasTask.execute((Void) null);
     }
 
     @Override
@@ -216,6 +242,30 @@ public class Navegador extends AppCompatActivity
 
                 Log.i("ObtenerEmailTask","Fin onPostExecute");
 
+            }
+        }
+    }
+
+    private class ObtenerClinicasTask  extends AsyncTask<Void, Void, Boolean>{
+
+        public ObtenerClinicasTask(String s) {
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            Log.i("ObtenerClinicasTask","Inicio doInBackground");
+            listaclinicas.add(new ClinicaBean());
+            Log.i("ObtenerClinicasTask","Fin doInBackground");
+            return true;
+        }
+        protected void onPostExecute(Boolean sucess) {
+            if(sucess){
+                Log.i("ObtenerClinicasTask","Inicio onPostExecute");
+                if(getSupportFragmentManager().findFragmentById(R.id.flContent) instanceof ClinicasFragment){
+                    ClinicasFragment articleFrag = (ClinicasFragment)getSupportFragmentManager().findFragmentById(R.id.flContent);
+                    articleFrag.addAllClinicas(listaclinicas);
+                }
+                Log.i("ObtenerClinicasTask","Fin onPostExecute");
             }
         }
     }

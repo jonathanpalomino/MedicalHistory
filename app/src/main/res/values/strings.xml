@@ -15,6 +15,7 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
 
+    <string name="menu_clinicas">Clinicas Disponibles</string>
     <string name="menu_medicos">Medicos tratantes</string>
     <string name="menu_recetas">Recetas recibidas</string>
     <string name="menu_medicinas">Medicinas en Casa</string>
@@ -23,4 +24,7 @@
     <string name="menu_diagnosticos">Enfermedades pre-existentes</string>
 
     <string name="action_save">Guardar</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
